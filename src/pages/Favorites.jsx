@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Header from '../Components/Header';
 
 class Favorites extends Component {
   render() {
@@ -6,6 +7,7 @@ class Favorites extends Component {
       <div
         data-testid="page-favorites"
       >
+        <Header />
         Favorites
       </div>
     );
