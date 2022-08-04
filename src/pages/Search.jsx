@@ -14,6 +14,7 @@ class Search extends Component {
       loading: false,
       artistName: '',
       artistArray: [],
+      notFound: '',
     };
   }
 
@@ -35,11 +36,24 @@ class Search extends Component {
       inputArtist: '',
       artistName: inputArtist,
       artistArray: result,
+    }, () => {
+      if (result.length === 0) {
+        this.setState({
+          notFound: 'Nenhum álbum foi encontrado',
+        });
+      }
     });
   }
 
   render() {
-    const { inputArtist, disabled, loading, artistName, artistArray } = this.state;
+    const {
+      inputArtist,
+      disabled,
+      loading,
+      artistName,
+      artistArray,
+      notFound,
+    } = this.state;
     return (
       <div
         data-testid="page-search"
@@ -64,14 +78,12 @@ class Search extends Component {
             Pesquisar
           </button>
         </form>
-        <section>
-          <h3>
-            {`Resultado de álbuns de: ${artistName}`}
-          </h3>
-          <div>
-            {artistArray.map((album) => (
+        { artistArray.length > 0
+        && <h3>{`Resultado de álbuns de: ${artistName}`}</h3>}
+        { artistArray.length > 0
+          && artistArray.map((album) => (
+            <div key={ album.collectionId }>
               <Link
-                key={ album.collectionId }
                 data-testid={ `link-to-album-${album.collectionId}` }
                 to={ `/album/${album.collectionId}` }
               >
@@ -80,10 +92,9 @@ class Search extends Component {
                   Album:${album.collectionName}`}
                 </p>
               </Link>
-            ))}
-          </div>
-          {artistArray.length === 0 && <p>Nenhum álbum foi encontrado</p>}
-        </section>
+            </div>
+          ))}
+        {!artistArray.length && <p>{notFound}</p>}
       </div>
     );
   }
